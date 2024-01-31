@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.baeldung.multimodulemavenproject</groupId>
     <artifactId>multimodulemavenproject</artifactId>
@@ -53,5 +53,53 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
 
+            <id>tia</id>
+            <activation>
+                <property>
+                    <name>tia</name>
+                </property>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>com.teamscale</groupId>
+                    <artifactId>impacted-test-engine</artifactId>
+                    <version>33.0.0-SNAPSHOT</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.teamscale</groupId>
+                        <artifactId>teamscale-maven-plugin</artifactId>
+                        <version>33.0.0-SNAPSHOT</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-tia-unit-test</goal> <!-- Enables TIA for Surefire unit tests -->
+                                    <goal>prepare-tia-integration-test
+                                    </goal> <!-- Enables TIA for Failsafe integration tests -->
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <teamscaleUrl>http://localhost:8080</teamscaleUrl>
+                            <projectId>maven-multi-module-project</projectId>
+                            <tiaMode>exec-file</tiaMode>
+                            <username>admin</username>
+                            <accessToken>KFYubyZvuD7ed1UVHZSiI6dtHlsvpeVI</accessToken>
+                            <includes>
+                                <include>*com.baeldung*</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
